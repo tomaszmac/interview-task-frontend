@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    min-height: 100%;
+    background: theme("colors.app.bg");
+    color: theme("colors.ink.DEFAULT");
+    font-family: theme("fontFamily.sans");
+  }
+
+  body {
+    min-height: 100%;
+    margin: 0;
+    background: theme("colors.app.bg");
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  #app {
+    min-height: 100vh;
+  }
+}

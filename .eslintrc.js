@@ -3,6 +3,12 @@ module.exports = {
   env: {
     node: true
   },
+  globals: {
+    defineEmits: 'readonly',
+    defineModel: 'readonly',
+    defineProps: 'readonly',
+    withDefaults: 'readonly'
+  },
   'extends': [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
