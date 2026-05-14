@@ -2,6 +2,11 @@
 node_modules
 /dist
 
+# Local AI/planning artifacts
+.planning/
+.codex/
+.agents/
+
 
 # local env files
 .env.local
