@@ -13,9 +13,9 @@
       <a
         :href="href"
         :class="[
-          'inline-flex min-w-20 items-center justify-center whitespace-nowrap border-b-2 px-4 pt-5 text-center text-sm font-medium leading-6 no-underline transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand/20 sm:min-w-[88px] sm:px-6',
+          'focus-ring inline-flex min-w-20 items-center justify-center whitespace-nowrap border-b-2 px-4 text-center text-sm font-medium leading-6 no-underline transition-colors sm:min-w-[88px] sm:px-6',
           isExactActive
-            ? 'border-brand text-ink-soft'
+            ? 'border-brand text-ink'
             : 'border-transparent text-ink-subtle hover:text-ink-soft'
         ]"
         :aria-current="isExactActive ? 'page' : undefined"

@@ -6,7 +6,7 @@
 
   <section
     v-else
-    class="min-h-[320px] overflow-hidden rounded bg-app-surface sm:min-h-[444px]"
+    class="min-h-[320px] overflow-auto rounded border border-main-universal-darker-bg bg-app-surface sm:h-[444px] sm:min-h-0"
     aria-labelledby="stop-times-title"
   >
     <div class="flex min-h-14 items-center px-4 pb-2 pt-6 sm:px-6">
@@ -15,26 +15,23 @@
       </h2>
     </div>
 
-    <div
-      class="flex min-h-14 items-center justify-between gap-4 border-b border-line px-4 pb-2 pt-6 sm:px-6"
-    >
-      <h3 class="m-0 text-sm font-semibold leading-6 text-ink">Time</h3>
-    </div>
-
-    <ul class="m-0 list-none p-0" aria-label="Departure times for selected stop">
-      <li v-for="time in times" :key="time" class="min-h-14 border-b border-line">
-        <span
-          class="flex min-h-14 w-full items-center px-4 py-4 text-sm font-normal leading-6 text-ink-soft sm:px-6"
-        >
+    <TimetableTable aria-label="Departure times for selected stop" heading="Time">
+      <tr
+        v-for="(time, index) in times"
+        :key="`${time}-${index}`"
+        class="h-14 border-b border-main-light-bg"
+      >
+        <td class="px-4 text-xs font-normal leading-4 text-ink-soft sm:px-6">
           {{ time }}
-        </span>
-      </li>
-    </ul>
+        </td>
+      </tr>
+    </TimetableTable>
   </section>
 </template>
 
 <script setup lang="ts">
   import EmptyState from '@/components/ui/EmptyState.vue';
+  import TimetableTable from '@/components/ui/TimetableTable.vue';
   import type { TimeString } from '@/types/timetable';
 
   defineProps<{

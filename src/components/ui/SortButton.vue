@@ -1,12 +1,18 @@
 <template>
   <button
-    class="inline-flex min-h-8 min-w-11 items-center justify-center rounded border border-transparent bg-transparent px-2 py-1 text-[11px] font-semibold leading-4 text-ink-muted transition-colors hover:border-line hover:text-brand focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand/20"
+    class="focus-ring inline-flex h-7 w-7 items-center justify-center rounded border border-transparent bg-transparent p-1 transition-colors hover:border-line"
     type="button"
     :aria-label="ariaLabel"
     :title="ariaLabel"
     @click="$emit('toggle')"
   >
-    <span aria-hidden="true">{{ icon }}</span>
+    <img
+      class="h-4 w-4 transition-transform"
+      :class="{ 'rotate-180': direction === 'asc' }"
+      src="@/assets/icon-arrow-bottom-rec.svg"
+      alt=""
+      aria-hidden="true"
+    >
   </button>
 </template>
 
@@ -19,10 +25,10 @@
     label: string;
   }>();
 
-  defineEmits(['toggle']);
+  defineEmits<{
+    toggle: [];
+  }>();
 
-
-  const icon = computed(() => (props.direction === 'asc' ? 'A-Z' : 'Z-A'));
   const ariaLabel = computed(
     () =>
       `Sort ${props.label} ${

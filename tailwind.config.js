@@ -1,3 +1,13 @@
+const figmaColors = {
+  main: '#1A1A1A',
+  mainLightBg: '#F3F4F9',
+  mainUniversalDarkerBg: '#E2E4EA',
+  mainUniversalLighten1: '#33373C',
+  mainUniversalLighten2: '#63666E',
+  mainUniversalLighten3: '#9A9DA4',
+  repIoPrimary: '#1952E1'
+};
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -7,25 +17,41 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        main: {
+          DEFAULT: figmaColors.main,
+          'light-bg': figmaColors.mainLightBg
+        },
+        'main-universal': {
+          'main-lighten-1': figmaColors.mainUniversalLighten1,
+          'main-lighten-2': figmaColors.mainUniversalLighten2,
+          'main-lighten-3': figmaColors.mainUniversalLighten3,
+          'darker-bg': figmaColors.mainUniversalDarkerBg
+        },
+        'rep-io': {
+          primary: figmaColors.repIoPrimary
+        },
         app: {
-          bg: '#F3F4F8',
+          bg: figmaColors.mainLightBg,
           surface: '#FFFFFF'
         },
         brand: {
-          DEFAULT: '#1952E1',
+          DEFAULT: figmaColors.repIoPrimary,
           hover: '#1649CA',
           active: '#123DA9'
         },
         ink: {
-          DEFAULT: '#1A1A1A',
-          soft: '#33373C',
-          muted: '#63666E',
-          subtle: '#9A9DA4'
+          DEFAULT: figmaColors.main,
+          soft: figmaColors.mainUniversalLighten1,
+          muted: figmaColors.mainUniversalLighten2,
+          subtle: figmaColors.mainUniversalLighten3
         },
-        line: '#E2E4EA'
+        line: figmaColors.mainUniversalDarkerBg
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif']
+      },
+      boxShadow: {
+        toast: '0 12px 32px rgba(26, 26, 26, 0.18)'
       }
     }
   },

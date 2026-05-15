@@ -43,6 +43,28 @@ describe('timetable domain helpers', () => {
     ]);
   });
 
+  it('collapses duplicate line stops by name and keeps the minimum route order', () => {
+    const duplicateStopRecords: StopTimeRecord[] = [
+      { line: 200, stop: 'Museum', order: 5, time: '10:00' },
+      { line: 200, stop: 'Central', order: 2, time: '10:05' },
+      { line: 200, stop: 'Museum', order: 3, time: '10:10' },
+      { line: 200, stop: 'Arena', order: 4, time: '10:15' },
+      { line: 200, stop: 'Museum', order: 3, time: '10:20' },
+      { line: 201, stop: 'Museum', order: 1, time: '11:00' }
+    ];
+
+    expect(getStopsForLine(duplicateStopRecords, 200, 'asc')).toEqual([
+      { name: 'Central', order: 2, lines: [200] },
+      { name: 'Museum', order: 3, lines: [200] },
+      { name: 'Arena', order: 4, lines: [200] }
+    ]);
+    expect(getStopsForLine(duplicateStopRecords, 200, 'desc')).toEqual([
+      { name: 'Arena', order: 4, lines: [200] },
+      { name: 'Museum', order: 3, lines: [200] },
+      { name: 'Central', order: 2, lines: [200] }
+    ]);
+  });
+
   it('returns times for a selected line and stop sorted chronologically', () => {
     expect(getTimesForStop(records, 100, 'Central')).toEqual(['08:30', '14:05']);
   });
@@ -65,6 +87,29 @@ describe('timetable domain helpers', () => {
     ]);
     expect(filterStops(stops, '')).toEqual(stops);
     expect(filterStops(stops, '')).not.toBe(stops);
+  });
+
+  it('keeps all-stops sorting alphabetical while storing minimum order and merged lines', () => {
+    const unsortedRecords: StopTimeRecord[] = [
+      { line: 30, stop: 'Żabiniec', order: 8, time: '09:00' },
+      { line: 20, stop: 'Borek', order: 4, time: '09:05' },
+      { line: 10, stop: 'Álfa', order: 6, time: '09:10' },
+      { line: 20, stop: 'Żabiniec', order: 2, time: '09:15' },
+      { line: 10, stop: 'Centrum', order: 1, time: '09:20' }
+    ];
+
+    expect(getAllStops(unsortedRecords)).toEqual([
+      { name: 'Álfa', order: 6, lines: [10] },
+      { name: 'Borek', order: 4, lines: [20] },
+      { name: 'Centrum', order: 1, lines: [10] },
+      { name: 'Żabiniec', order: 2, lines: [20, 30] }
+    ]);
+    expect(getAllStops(unsortedRecords, 'desc').map((stop) => stop.name)).toEqual([
+      'Żabiniec',
+      'Centrum',
+      'Borek',
+      'Álfa'
+    ]);
   });
 
   it('converts timetable strings to minutes and places invalid values last', () => {
