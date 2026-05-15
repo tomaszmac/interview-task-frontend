@@ -11,7 +11,7 @@
       <LineStopsPanel
         :line="selectedLine"
         :stops="lineStops"
-        :selected-stop="selectedStop"
+        :selected-stop-key="selectedStopKey"
         :sort-direction="stopsSortDirection"
         @toggle-sort="toggleStopsSort"
         @select-stop="selectStop"
@@ -32,11 +32,15 @@
     getTimesForStop
   } from '@/domain/timetable';
   import { useTimetableStore } from '@/store/timetableStore';
-  import type { BusLineNumber, SortDirection } from '@/types/timetable';
+  import type {
+    BusLineNumber,
+    RouteStopKey,
+    SortDirection
+  } from '@/types/timetable';
 
   const store = useTimetableStore();
   const selectedLine = ref<BusLineNumber | null>(null);
-  const selectedStop = ref<string | null>(null);
+  const selectedStopKey = ref<RouteStopKey | null>(null);
   const stopsSortDirection = ref<SortDirection>('asc');
 
   onMounted(() => {
@@ -55,26 +59,35 @@
     );
   });
 
+  const selectedStop = computed(() => {
+    if (selectedStopKey.value === null) {
+      return null;
+    }
+
+    return lineStops.value.find((stop) => stop.key === selectedStopKey.value)
+      ?.name ?? null;
+  });
+
   const stopTimes = computed(() => {
-    if (selectedLine.value === null || selectedStop.value === null) {
+    if (selectedLine.value === null || selectedStopKey.value === null) {
       return [];
     }
 
     return getTimesForStop(
       store.records,
       selectedLine.value,
-      selectedStop.value
+      selectedStopKey.value
     );
   });
 
   function selectLine(line: BusLineNumber) {
     selectedLine.value = line;
-    selectedStop.value = null;
+    selectedStopKey.value = null;
     stopsSortDirection.value = 'asc';
   }
 
-  function selectStop(stopName: string) {
-    selectedStop.value = stopName;
+  function selectStop(stopKey: RouteStopKey) {
+    selectedStopKey.value = stopKey;
   }
 
   function toggleStopsSort() {

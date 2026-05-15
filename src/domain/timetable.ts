@@ -1,6 +1,8 @@
 import type {
   BusLineNumber,
   BusStop,
+  RouteStop,
+  RouteStopKey,
   SortDirection,
   StopTimeRecord,
   TimeString
@@ -39,6 +41,10 @@ function uniqueSortedLines(lines: Iterable<BusLineNumber>): BusLineNumber[] {
   return Array.from(new Set(lines)).sort((a, b) => a - b);
 }
 
+function getRouteStopKey(line: BusLineNumber, order: number): RouteStopKey {
+  return `${line}:${order}`;
+}
+
 export function getSortedBusLines(records: StopTimeRecord[]): BusLineNumber[] {
   const lines = records.map((record) => record.line);
 
@@ -49,18 +55,19 @@ export function getStopsForLine(
   records: StopTimeRecord[],
   line: BusLineNumber,
   direction: SortDirection = DEFAULT_SORT_DIRECTION
-): BusStop[] {
-  const stopsByName = new Map<string, BusStop>();
+): RouteStop[] {
+  const stopsByPosition = new Map<RouteStopKey, RouteStop>();
 
   records.forEach((record) => {
     if (record.line !== line) {
       return;
     }
 
-    const existing = stopsByName.get(record.stop);
+    const key = getRouteStopKey(record.line, record.order);
 
-    if (!existing || record.order < existing.order) {
-      stopsByName.set(record.stop, {
+    if (!stopsByPosition.has(key)) {
+      stopsByPosition.set(key, {
+        key,
         name: record.stop,
         order: record.order,
         lines: [line]
@@ -68,7 +75,7 @@ export function getStopsForLine(
     }
   });
 
-  return Array.from(stopsByName.values()).sort((a, b) =>
+  return Array.from(stopsByPosition.values()).sort((a, b) =>
     compareStops(a, b, direction)
   );
 }
@@ -76,10 +83,14 @@ export function getStopsForLine(
 export function getTimesForStop(
   records: StopTimeRecord[],
   line: BusLineNumber,
-  stop: string
+  stopKey: RouteStopKey
 ): TimeString[] {
   return records
-    .filter((record) => record.line === line && record.stop === stop)
+    .filter(
+      (record) =>
+        record.line === line &&
+        getRouteStopKey(record.line, record.order) === stopKey
+    )
     .map((record) => record.time)
     .sort((a, b) => timeToMinutes(a) - timeToMinutes(b));
 }

@@ -3,7 +3,7 @@ import TimetableTable from '@/components/ui/TimetableTable.vue';
 import LineStopsPanel from '@/features/bus-lines/LineStopsPanel.vue';
 import StopTimesPanel from '@/features/bus-lines/StopTimesPanel.vue';
 import StopsSearch from '@/features/stops/StopsSearch.vue';
-import type { BusStop } from '@/types/timetable';
+import type { RouteStop } from '@/types/timetable';
 
 describe('StopsSearch', () => {
   it('emits v-model updates from the search input', async () => {
@@ -81,9 +81,9 @@ describe('TimetableTable and SortButton', () => {
 });
 
 describe('LineStopsPanel', () => {
-  const stops: BusStop[] = [
-    { name: 'Central', order: 1, lines: [10] },
-    { name: 'Museum', order: 2, lines: [10] }
+  const stops: RouteStop[] = [
+    { key: '10:1', name: 'Central', order: 1, lines: [10] },
+    { key: '10:2', name: 'Museum', order: 2, lines: [10] }
   ];
 
   it('renders stops in a table, marks the selected stop, and emits selection', async () => {
@@ -91,7 +91,7 @@ describe('LineStopsPanel', () => {
       props: {
         line: 10,
         stops,
-        selectedStop: 'Central',
+        selectedStopKey: '10:1',
         sortDirection: 'asc'
       }
     });
@@ -107,7 +107,7 @@ describe('LineStopsPanel', () => {
 
     await fireEvent.click(within(table).getByRole('button', { name: 'Museum' }));
 
-    expect(emitted()['select-stop']).toEqual([['Museum']]);
+    expect(emitted()['select-stop']).toEqual([['10:2']]);
   });
 });
 

@@ -6,7 +6,7 @@
 
   <section
     v-else
-    class="min-h-[320px] overflow-auto rounded border border-main-universal-darker-bg bg-app-surface sm:h-[444px] sm:min-h-0"
+    class="flex h-[320px] min-h-0 flex-col overflow-hidden rounded border border-main-universal-darker-bg bg-app-surface sm:h-[444px]"
     aria-labelledby="line-stops-title"
   >
     <div class="flex min-h-14 items-center px-4 pb-2 pt-6 sm:px-6">
@@ -23,18 +23,22 @@
       strong-header-border
       @toggle-sort="$emit('toggle-sort')"
     >
-      <tr v-for="stop in stops" :key="stop.name" class="h-14 border-b border-main-light-bg">
+      <tr
+        v-for="stop in stops"
+        :key="stop.key"
+        class="table h-14 w-full table-fixed border-b border-main-light-bg"
+      >
         <td class="p-0">
           <button
             type="button"
-            :aria-current="stop.name === selectedStop ? 'true' : undefined"
+            :aria-current="stop.key === selectedStopKey ? 'true' : undefined"
             :class="[
               'focus-ring flex h-14 w-full items-center bg-transparent px-4 text-left text-xs font-normal leading-4 transition-colors sm:px-6',
-              stop.name === selectedStop
+              stop.key === selectedStopKey
                 ? 'text-brand'
                 : 'text-ink-soft hover:text-brand'
             ]"
-            @click="$emit('select-stop', stop.name)"
+            @click="$emit('select-stop', stop.key)"
           >
             {{ stop.name }}
           </button>
@@ -49,19 +53,20 @@
   import TimetableTable from '@/components/ui/TimetableTable.vue';
   import type {
     BusLineNumber,
-    BusStop,
+    RouteStop,
+    RouteStopKey,
     SortDirection
   } from '@/types/timetable';
 
   defineProps<{
     line: BusLineNumber | null;
-    stops: BusStop[];
-    selectedStop: string | null;
+    stops: RouteStop[];
+    selectedStopKey: RouteStopKey | null;
     sortDirection: SortDirection;
   }>();
 
   defineEmits<{
     'toggle-sort': [];
-    'select-stop': [stopName: string];
+    'select-stop': [stopKey: RouteStopKey];
   }>();
 </script>

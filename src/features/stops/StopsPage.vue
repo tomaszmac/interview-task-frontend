@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex h-[calc(100dvh-192px)] flex-col overflow-hidden rounded border border-main-universal-darker-bg bg-app-surface p-4 sm:h-[calc(100dvh-224px)]"
+    class="flex h-[calc(100dvh-192px)] min-h-[360px] flex-col overflow-hidden rounded border border-main-universal-darker-bg bg-app-surface p-4 sm:h-[calc(100dvh-224px)]"
     aria-label="Stops"
   >
     <StopsSearch v-model="searchQuery" />

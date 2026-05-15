@@ -16,7 +16,7 @@
           'focus-ring inline-flex min-w-20 items-center justify-center whitespace-nowrap border-b-2 px-4 text-center text-sm font-medium leading-6 no-underline transition-colors sm:min-w-[88px] sm:px-6',
           isExactActive
             ? 'border-brand text-ink'
-            : 'border-transparent text-ink-subtle hover:text-ink-soft'
+            : 'border-transparent text-ink-muted hover:text-ink-soft'
         ]"
         :aria-current="isExactActive ? 'page' : undefined"
         @click="navigate"

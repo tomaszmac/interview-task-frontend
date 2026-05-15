@@ -28,22 +28,22 @@ describe('timetable domain helpers', () => {
     const original = [...records];
 
     expect(getStopsForLine(records, 100)).toEqual([
-      { name: 'Alpha', order: 1, lines: [100] },
-      { name: 'Central', order: 2, lines: [100] },
-      { name: 'Beta', order: 3, lines: [100] }
+      { key: '100:1', name: 'Alpha', order: 1, lines: [100] },
+      { key: '100:2', name: 'Central', order: 2, lines: [100] },
+      { key: '100:3', name: 'Beta', order: 3, lines: [100] }
     ]);
     expect(records).toEqual(original);
   });
 
   it('supports descending stop order', () => {
     expect(getStopsForLine(records, 100, 'desc')).toEqual([
-      { name: 'Beta', order: 3, lines: [100] },
-      { name: 'Central', order: 2, lines: [100] },
-      { name: 'Alpha', order: 1, lines: [100] }
+      { key: '100:3', name: 'Beta', order: 3, lines: [100] },
+      { key: '100:2', name: 'Central', order: 2, lines: [100] },
+      { key: '100:1', name: 'Alpha', order: 1, lines: [100] }
     ]);
   });
 
-  it('collapses duplicate line stops by name and keeps the minimum route order', () => {
+  it('keeps duplicate stop names at different route positions', () => {
     const duplicateStopRecords: StopTimeRecord[] = [
       { line: 200, stop: 'Museum', order: 5, time: '10:00' },
       { line: 200, stop: 'Central', order: 2, time: '10:05' },
@@ -54,19 +54,35 @@ describe('timetable domain helpers', () => {
     ];
 
     expect(getStopsForLine(duplicateStopRecords, 200, 'asc')).toEqual([
-      { name: 'Central', order: 2, lines: [200] },
-      { name: 'Museum', order: 3, lines: [200] },
-      { name: 'Arena', order: 4, lines: [200] }
+      { key: '200:2', name: 'Central', order: 2, lines: [200] },
+      { key: '200:3', name: 'Museum', order: 3, lines: [200] },
+      { key: '200:4', name: 'Arena', order: 4, lines: [200] },
+      { key: '200:5', name: 'Museum', order: 5, lines: [200] }
     ]);
     expect(getStopsForLine(duplicateStopRecords, 200, 'desc')).toEqual([
-      { name: 'Arena', order: 4, lines: [200] },
-      { name: 'Museum', order: 3, lines: [200] },
-      { name: 'Central', order: 2, lines: [200] }
+      { key: '200:5', name: 'Museum', order: 5, lines: [200] },
+      { key: '200:4', name: 'Arena', order: 4, lines: [200] },
+      { key: '200:3', name: 'Museum', order: 3, lines: [200] },
+      { key: '200:2', name: 'Central', order: 2, lines: [200] }
     ]);
   });
 
   it('returns times for a selected line and stop sorted chronologically', () => {
-    expect(getTimesForStop(records, 100, 'Central')).toEqual(['08:30', '14:05']);
+    expect(getTimesForStop(records, 100, '100:2')).toEqual(['08:30', '14:05']);
+  });
+
+  it('returns times for one route position when stop names repeat', () => {
+    const duplicateStopRecords: StopTimeRecord[] = [
+      { line: 200, stop: 'Museum', order: 5, time: '10:00' },
+      { line: 200, stop: 'Museum', order: 3, time: '10:10' },
+      { line: 200, stop: 'Museum', order: 3, time: '10:20' }
+    ];
+
+    expect(getTimesForStop(duplicateStopRecords, 200, '200:3')).toEqual([
+      '10:10',
+      '10:20'
+    ]);
+    expect(getTimesForStop(duplicateStopRecords, 200, '200:5')).toEqual(['10:00']);
   });
 
   it('returns all unique stops for the stops page with related lines', () => {

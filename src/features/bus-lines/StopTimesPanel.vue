@@ -6,7 +6,7 @@
 
   <section
     v-else
-    class="min-h-[320px] overflow-auto rounded border border-main-universal-darker-bg bg-app-surface sm:h-[444px] sm:min-h-0"
+    class="flex h-[320px] min-h-0 flex-col overflow-hidden rounded border border-main-universal-darker-bg bg-app-surface sm:h-[444px]"
     aria-labelledby="stop-times-title"
   >
     <div class="flex min-h-14 items-center px-4 pb-2 pt-6 sm:px-6">
@@ -19,7 +19,7 @@
       <tr
         v-for="(time, index) in times"
         :key="`${time}-${index}`"
-        class="h-14 border-b border-main-light-bg"
+        class="table h-14 w-full table-fixed border-b border-main-light-bg"
       >
         <td class="px-4 text-xs font-normal leading-4 text-ink-soft sm:px-6">
           {{ time }}

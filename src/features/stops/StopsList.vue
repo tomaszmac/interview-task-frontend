@@ -1,6 +1,6 @@
 <template>
   <section
-    class="-mx-4 mt-4 min-h-0 flex-1 overflow-y-auto bg-app-surface"
+    class="-mx-4 mt-4 flex min-h-0 flex-1 flex-col overflow-hidden bg-app-surface"
     aria-labelledby="all-stops-title"
   >
     <h2 id="all-stops-title" class="sr-only">Bus Stops</h2>
@@ -23,7 +23,7 @@
       <tr
         v-for="stop in stops"
         :key="stop.name"
-        class="h-14 border-b border-main-light-bg last:border-b-0"
+        class="table h-14 w-full table-fixed border-b border-main-light-bg last:border-b-0"
       >
         <td class="px-4 text-xs font-normal leading-4 text-ink-soft sm:px-6">
           {{ stop.name }}

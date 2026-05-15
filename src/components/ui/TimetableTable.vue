@@ -1,9 +1,12 @@
 <template>
-  <table class="w-full table-fixed border-collapse" :aria-label="ariaLabel">
-    <thead>
+  <table
+    class="flex h-full min-h-0 w-full table-fixed flex-col border-collapse"
+    :aria-label="ariaLabel"
+  >
+    <thead class="flex-none">
       <tr
         :class="[
-          'h-14 border-b',
+          'table h-14 w-full table-fixed border-b',
           strongHeaderBorder ? 'border-main-universal-darker-bg' : 'border-main-light-bg'
         ]"
       >
@@ -29,7 +32,7 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="block min-h-0 flex-1 overflow-y-auto">
       <slot />
     </tbody>
   </table>

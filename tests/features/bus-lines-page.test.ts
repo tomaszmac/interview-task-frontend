@@ -14,7 +14,8 @@ const records: StopTimeRecord[] = [
   { line: 7, stop: 'Central', order: 1, time: '09:30' },
   { line: 8, stop: 'Depot', order: 1, time: '06:00' },
   { line: 7, stop: 'Park', order: 2, time: '11:00' },
-  { line: 7, stop: 'Park', order: 2, time: '08:15' }
+  { line: 7, stop: 'Park', order: 2, time: '08:15' },
+  { line: 7, stop: 'Park', order: 4, time: '13:45' }
 ];
 
 describe('BusLinesPage', () => {
@@ -36,10 +37,11 @@ describe('BusLinesPage', () => {
     expect(within(stopsTable).getAllByRole('cell').map((cell) => cell.textContent)).toEqual([
       'Central',
       'Park',
-      'Museum'
+      'Museum',
+      'Park'
     ]);
 
-    await fireEvent.click(within(stopsTable).getByRole('button', { name: 'Park' }));
+    await fireEvent.click(within(stopsTable).getAllByRole('button', { name: 'Park' })[0]);
 
     const timesTable = screen.getByRole('table', {
       name: 'Departure times for selected stop'
@@ -48,6 +50,12 @@ describe('BusLinesPage', () => {
     expect(within(timesTable).getAllByRole('cell').map((cell) => cell.textContent)).toEqual([
       '08:15',
       '11:00'
+    ]);
+
+    await fireEvent.click(within(stopsTable).getAllByRole('button', { name: 'Park' })[1]);
+
+    expect(within(timesTable).getAllByRole('cell').map((cell) => cell.textContent)).toEqual([
+      '13:45'
     ]);
   });
 });
